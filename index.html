@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>ACNH Villager</title>
+</head>
+
+<body>
+    <h1>ACNH Villagers</h1>
+    <p>A list of my favourite Villagers</p>
+
+    <div id="Profile"> </div>
+    <div id="download"> </div>
+    <div id="errors"> </div>
+    <script>
+
+const fetchAnimalCrossingVillagers = async () => {
+  let response = await fetch("AnimalCrossing")
+///  console.log(response)
+  if (response.ok){ return response.json() }
+  else{
+    var p = document.createElement("p");
+    p.innerHTML = response.url + '<br/>' +
+      "Error: " + response.status;
+    document.querySelector('#errors').appendChild(p);
+  }
+}
+
+const display = (json) => {
+    console.log(json)
+    for (villagers of json){
+
+
+   var d = document.createElement("div");
+    d.innerHTML =
+      '<h3>' + villagers.name + '</h3>' +
+      '<img src="'+ villagers.image_uri+'" />' +
+      '<p>personality: ' + villagers.personality + '</p>' +
+      '<p>species: ' + villagers.species + '</p>';
+    '<p>image: ' + villagers.image_uri + '</p>';
+    '<p>saying: ' + villagers.saying + '</p>';
+//    '<p>saying: ' + villagers.catchphrase + '</p>';
+    document.querySelector('#profile').appendChild(d);
+  }
+}
+
+const download = (json) => {
+    var a = document.createElement("a");
+    a.innerHTML = "Download JSON for " + json.name;
+    var file = new Blob([JSON.stringify(json)], {type: 'application/json'});
+    a.href = URL.createObjectURL(file);
+    a.download = json.name + '_data.json';
+    document.querySelector('#download').appendChild(a);
+}
+
+fetchAnimalCrossingVillagers().then(data => {
+    if (data){
+      display( data )
+    //  download( data )
+    }
+})
+
+        
+        
+    </script>
+</body>
+
+</html>
